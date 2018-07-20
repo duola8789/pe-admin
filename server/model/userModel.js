@@ -22,3 +22,13 @@ export async function getUserByName(username) {
   })
 }
 
+// 添加用户
+export async function createUser(username, password, nickname) {
+  return await User.create({
+    username,
+    password,
+    nickname
+  });
+}
+
+

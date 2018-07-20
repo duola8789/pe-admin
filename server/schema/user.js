@@ -1,21 +1,33 @@
 /* jshint indent: 2 */
 
-export default function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user', {
     id: {
-      type: DataTypes.INTEGER(10),
+      type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true // 自增id
     },
     username: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(128),
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING(128),
+      allowNull: false
+    },
+    nickname: {
+      type: DataTypes.STRING(128),
       allowNull: true,
       defaultValue: ''
     },
-    password: {
-      type: DataTypes.CHAR(128),
-      allowNull: true,
-      defaultValue: ''
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     tableName: 'user'

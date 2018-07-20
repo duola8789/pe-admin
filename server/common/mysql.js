@@ -6,7 +6,7 @@ import config from '../config/db';
 
 const mysql = new Sequelize(config.mysql.default, {
   define: {
-    timestamps: false,
+    // timestamps: false,
   },
   operatorsAliases: false
 });
