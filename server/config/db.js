@@ -9,7 +9,6 @@ if(process.env.NODE_ENV === 'development') {
 } else {
   dbInfo = 'mysql://root:zhouhao8789@172.21.0.16:3306/zhou'; // 线上库
 }
-console.log(dbInfo)
 
 module.exports  = exports = {
   mysql: {
