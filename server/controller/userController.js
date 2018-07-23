@@ -10,6 +10,7 @@ import dbConfig from '../config/db';
 
 export async function createUser(ctx) {
   const data = ctx.request.body; // post过来的数据存在request.body里
+  console.log(data);
   const { username, password, nickname } = data;
   // 缺少用户名
   if (!username) {
@@ -61,7 +62,13 @@ export async function createUser(ctx) {
   ctx.body = {
     success: !!ret,
     retDsc: ret ? '用户创建成功' : '用户创建失败',
-    ret
+    ret: {
+      id: ret.id,
+      username: ret.username,
+      nickname: "老周",
+      updatedAt: "2018-07-23T06:21:28.147Z",
+      createdAt: "2018-07-23T06:21:28.147Z"
+    }
   };
 }
 
