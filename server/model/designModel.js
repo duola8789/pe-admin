@@ -16,8 +16,9 @@ export async function getDesignById(id) {
   })
 }
 
-export async function getDesigns(pageSize, pageNum) {
+export async function getDesigns(pageSize, pageNum, query) {
   return await Design.findAndCountAll({
+    where: query,
     offset: (pageNum - 1) * pageSize, //开始的数据索引
     limit: pageSize // 每页限制返回的数据条数
   });

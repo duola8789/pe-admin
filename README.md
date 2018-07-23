@@ -47,3 +47,7 @@ sequelize-auto -o "./schema" -d zhou -h 127.0.0.1 -u root -p 3306 -x XXXXX -e my
 1. `npm run build`
 2. 上传build文件夹
 3. 在服务器上，`pm2 start index.js`
+
+## API文档
+
+[ShareDoc](https://www.showdoc.cc/web/#/115038294324658)

@@ -6,7 +6,7 @@ import KoaRouter from 'koa-router';
 
 const router = new KoaRouter();
 
-router.get('/user/:id', userController.getUserInfo);
+router.get('/user', userController.getUserInfo);
 router.post('/login', userController.postUserAuth);
 router.post('/user', userController.createUser);
 

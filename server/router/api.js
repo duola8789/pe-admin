@@ -14,10 +14,10 @@ router.put('/example', exampleController.updateExample); // 更新example
 router.delete('/example/:id', exampleController.deleteExample); // 删除example
 
 router.post('/design', designController.createDesign); // 创建design
-router.get('/design/:id', designController.getDesignById); // 查询design
+router.get('/design', designController.getDesignById); // 查询design
 router.get('/designs', designController.getDesigns); // 查询design列表
 router.put('/design', designController.updateDesign); // 更新design
-router.delete('/design/:id', designController.deleteDesign); // 删除design
+router.delete('/design', designController.deleteDesign); // 删除design
 
 export  {
   router

@@ -8,6 +8,7 @@ import * as userModal from '../model/userModel'
 import config from '../../config/common';
 import dbConfig from '../config/db';
 
+// 用户注册
 export async function createUser(ctx) {
   const data = ctx.request.body; // post过来的数据存在request.body里
   console.log(data);
@@ -17,6 +18,7 @@ export async function createUser(ctx) {
     ctx.body = {
       success: false,
       retDsc: '缺少用户名',
+      ret: null
     };
     return
   }
@@ -25,6 +27,7 @@ export async function createUser(ctx) {
     ctx.body = {
       success: false,
       retDsc: '用户名长度应为4-12位',
+      ret: null
     };
     return
   }
@@ -33,7 +36,8 @@ export async function createUser(ctx) {
   if (!reg.test(username)) {
     ctx.body = {
       success: false,
-      retDsc: '用户名只能包含大小写英文字母以及-和_'
+      retDsc: '用户名只能包含大小写英文字母以及-和_',
+      ret: null
     };
     return
   }
@@ -42,6 +46,7 @@ export async function createUser(ctx) {
     ctx.body = {
       success: false,
       retDsc: '缺少密码',
+      ret: null
     };
     return
   }
@@ -51,6 +56,7 @@ export async function createUser(ctx) {
     ctx.body = {
       success: false,
       retDsc: '用户名已存在',
+      ret: null
     };
     return
   }
@@ -65,32 +71,39 @@ export async function createUser(ctx) {
     ret: {
       id: ret.id,
       username: ret.username,
-      nickname: "老周",
-      updatedAt: "2018-07-23T06:21:28.147Z",
-      createdAt: "2018-07-23T06:21:28.147Z"
+      nickname: ret.nickname,
+      updatedAt: ret.updatedAt,
+      createdAt: ret.createdAt
     }
   };
 }
 
-
+// 查询用户
 export async function getUserInfo(ctx) {
-  const id = ctx.params.id; // 获取url里传过来的参数里的id
-  const user = await userModal.getUserById(id);
-  if (user) {
-    ctx.body = {
-      success: true,
-      retDsc: '查询成功',
-      ret: user
-    }
-  } else {
+  const id = ctx.query.id; // 获取url里传过来的参数里的id
+  const ret = await userModal.getUserById(id);
+  if(!ret) {
     ctx.body = {
       success: false,
       retDsc: '用户不存在',
       ret: null
     };
+    return;
+  }
+  ctx.body = {
+    success: true,
+    retDsc: '查询成功',
+    ret: {
+      id: ret.id,
+      username: ret.username,
+      nickname: ret.nickname,
+      updatedAt: ret.updatedAt,
+      createdAt: ret.createdAt
+    }
   }
 }
 
+// 用户登录
 export async function postUserAuth(ctx) {
   const data = ctx.request.body; // post过来的数据存在request.body里
   const userInfo = await userModal.getUserByName(data.username); // 数据库返回的数据
