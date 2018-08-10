@@ -90,7 +90,7 @@
       replaceImageHandler(e, image) {
         const { id, src } = image;
         const { files } = e.target;
-        previewImage(e.target.files).then(v => {
+        previewImage(files).then(v => {
           let index = this.previewImages.findIndex(v => v.id === id);
           this.previewImages.splice(index, 1, v[0])
         }).catch(error => {
@@ -101,7 +101,7 @@
       // 添加单张
       previewHandlerSingle(e) {
         const { files } = e.target;
-        previewImage(e.target.files).then(v => {
+        previewImage(files).then(v => {
           this.previewImages = [
             ...this.previewImages,
             v[0]
@@ -119,8 +119,9 @@
       },
 
       // 图片已存在
-      imageExist() {
-
+      imageExist(file) {
+        const {name} = file.name;
+        return !!this.previewImages.find(v => v.name === name)
       }
     },
 
