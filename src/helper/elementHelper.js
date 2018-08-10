@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import {
   Table, TableColumn, Row, Col,
   Input,
-  Button
+  Button,
 } from 'element-ui'
 
 [

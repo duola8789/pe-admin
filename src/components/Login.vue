@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import * as API from '@/newwork/api';
+  import * as API from '@/network/api';
   import * as uiHelper from '@/helper/uiHelper';
 
   export default {

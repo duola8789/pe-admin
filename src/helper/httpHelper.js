@@ -12,6 +12,8 @@ axios.defaults.baseURL = sever.protocol + sever.host + ':' + sever.port;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;
 
+// axios.defaults.timeout = 5500;
+
 let loading;
 const errorText = '网络错误，请稍后重试';
 

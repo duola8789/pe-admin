@@ -2,7 +2,9 @@
  * Created by zh on 2018/6/5.
  */
 export const userAPI = {
-  login: '/auth/user'
+  login: '/auth/login', // 登陆， 'POST',
+  create: '/auth/user', // 注册， 'POST',、
+  find: '/auth/user', // 查询， 'GET',
 };
 
 export const exampleAPI = {

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import * as API from '@/newwork/api';
+  import * as API from '@/network/api';
   import * as uiHelper from '@/helper/uiHelper';
 
   export default {
@@ -27,10 +27,10 @@
       }
     },
     mounted() {
-      this.init();
+      // this.init();
     },
     beforeRouteUpdate(to, from, next) {
-      this.init(to.params.id)
+      // this.init(to.params.id)
     },
     computed: {},
     methods: {
