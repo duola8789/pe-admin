@@ -26,7 +26,8 @@
           </div>
         </li>
          <li class="preview-item placement-wrap">
-          <div class="placement">+</div>
+          <label class="placement">
+            +<input type="file" @change="previewHandlerSingle" accept="image/*" class="upload-input"></label>
         </li>
     </ul>
     </div>
@@ -97,11 +98,29 @@
         });
       },
 
+      // 添加单张
+      previewHandlerSingle(e) {
+        const { files } = e.target;
+        previewImage(e.target.files).then(v => {
+          this.previewImages = [
+            ...this.previewImages,
+            v[0]
+          ]
+        }).catch(error => {
+          e.target.value = src;
+        });
+      },
+
       // 删除图片
       deleteImageHandler(e) {
         const { id } = e;
         this.previewImages.splice(this.previewImages.findIndex(v => v.id === id), 1);
         showMessage('删除成功', 'success');
+      },
+
+      // 图片已存在
+      imageExist() {
+
       }
     },
 
