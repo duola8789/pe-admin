@@ -2,6 +2,7 @@
  * Created by zh on 2018/6/5.
  */
 import * as designModal from '../model/designModel'
+import { uploadToken } from '../common/qiniu_helper'
 
 // 获取单个
 export async function getDesignById(ctx) {
@@ -128,6 +129,16 @@ export async function deleteDesign(ctx) {
     success: (ret > 0),
     retDsc: ret > 0 ? '删除成功' : '删除失败',
     ret: null
+  };
+}
+
+export async function getUploadCertificate(ctx) {
+  ctx.body = {
+    success: true,
+    retDsc: '获取凭证成功',
+    ret: {
+      uploadToken
+    }
   };
 }
 

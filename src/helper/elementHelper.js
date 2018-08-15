@@ -8,15 +8,17 @@ import {
   Table, TableColumn, Row, Col,
   Input,
   Button,
+  MessageBox,
 } from 'element-ui'
 
 [
   Table, TableColumn, Row, Col,
   Input,
-  Button
+  Button,
 ].forEach(Compo => Vue.use(Compo));
 
 // Vue.prototype.$loading = Loading.service;
 // Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
 
 export default Vue

@@ -9,8 +9,9 @@
     <div class="upload-wrap">
       <div class="upload-button-wrap">
         <label class="upload-input-label">
-          <span>上传文件</span><input type="file" multiple @change="previewHandler" accept="image/*" class="upload-input">
+          <span>选择图片</span><input type="file" multiple @change="previewHandler" accept="image/*" class="upload-input">
         </label>
+        <ElButton size="mini" type="primary" @click="handleSubmit">提交</ElButton>
     </div>
       <ul class="preview-image-container">
         <li v-for="image in previewImages" :key="image.id" class="preview-item">
@@ -90,6 +91,10 @@
       replaceImageHandler(e, image) {
         const { id, src } = image;
         const { files } = e.target;
+        // 图片已存在
+        if (this.imageExist(files[0].name)) {
+          return;
+        }
         previewImage(files).then(v => {
           let index = this.previewImages.findIndex(v => v.id === id);
           this.previewImages.splice(index, 1, v[0])
@@ -101,6 +106,10 @@
       // 添加单张
       previewHandlerSingle(e) {
         const { files } = e.target;
+        // 图片已存在
+        if (this.imageExist(files[0].name)) {
+          return;
+        }
         previewImage(files).then(v => {
           this.previewImages = [
             ...this.previewImages,
@@ -119,9 +128,47 @@
       },
 
       // 图片已存在
-      imageExist(file) {
-        const {name} = file.name;
-        return !!this.previewImages.find(v => v.name === name)
+      imageExist(fileName) {
+        return !!this.previewImages.find(v => v.name === fileName) && !showMessage('图片已存在', 'error');
+      },
+
+      // 提交表单
+      handleSubmit() {
+        if (!this.previewImages.length) {
+          showMessage('请上传图片', 'error');
+          return false;
+        }
+        this.$confirm('确定要提交吗', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {
+          this.submitAll()
+        }).catch(() => {
+          showMessage('已取消', 'info')
+        })
+      },
+
+      async submitAll() {
+        // 获取上传token
+        const res = await this.$http.get(API.exampleAPI.upload);
+        const uploadToken = res.data.ret.uploadToken;
+        // 参数
+        const Qiniu_UploadUrl = 'http://up-z1.qiniup.com';
+        const domain = 'http://design.oldzhou.cn';
+        // 通过formData上传图片
+        let formData = new FormData();
+        formData.append('token', uploadToken);
+        formData.append('file', this.previewImages[0].file);
+
+        this.$http.post(Qiniu_UploadUrl, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          withCredentials: false
+        }).then(res => {
+          const src = `${domain}/${res.key}`
+        });
       }
     },
 

@@ -48,6 +48,7 @@ export function previewImage(files) {
           src: reader.result,
           name: files[file].name,
           id: files[file].name + files[file].lastModified,
+          file: files[file]
         })
       })
     })
