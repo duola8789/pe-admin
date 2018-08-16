@@ -1,8 +1,6 @@
 /**
  * Created by zh on 2018/6/7.
  */
-#app .el-table__body,
-#app .el-table__footer,
-#app .el-table__header {
-  table-layout: auto;
+body .el-table th.gutter{
+  display: table-cell!important;
 }
