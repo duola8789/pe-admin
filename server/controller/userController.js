@@ -136,6 +136,7 @@ export async function postUserAuth(ctx) {
     retDsc: '登陆成功',
     ret: {
       token,
+      nickname: userInfo.nickname,
     }
   }
 }
