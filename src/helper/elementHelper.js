@@ -8,6 +8,8 @@ import {
   Table, TableColumn, Row, Col,
   Input,
   Button,
+  Card,
+  Tooltip,
   MessageBox,
 } from 'element-ui'
 
@@ -15,6 +17,8 @@ import {
   Table, TableColumn, Row, Col,
   Input,
   Button,
+  Card,
+  Tooltip
 ].forEach(Compo => Vue.use(Compo));
 
 // Vue.prototype.$loading = Loading.service;
