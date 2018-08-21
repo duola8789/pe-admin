@@ -48,7 +48,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(128),
       allowNull: false
     },
-    descibe: {
+    description: {
       type: DataTypes.STRING(255),
       allowNull: true
     },

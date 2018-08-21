@@ -33,7 +33,7 @@ export async function createDesign(designInfo) {
     category: designInfo.category,
     designer: designInfo.designer,
     releaseTime: designInfo.releaseTime,
-    describe: designInfo.describe,
+    description: designInfo.description,
     comment: designInfo.comment,
   });
 
