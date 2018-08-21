@@ -1,17 +1,10 @@
 <template>
-  <div class="table-container">
-    <h1>EXAMPLES</h1>
-    <ElTable :data="examples" border style="width: 100%" @row-click="goToAdmin">
-      <ElTableColumn prop="id" width=50 label="id" align="center"></ElTableColumn>
-      <ElTableColumn prop="title" label="标题" align="center"></ElTableColumn>
-      <ElTableColumn prop="image" label="图片" align="center"></ElTableColumn>
-    </ElTable>
-    <div class="upload-wrap">
+  <div class="upload-wrap">
       <div class="upload-button-wrap">
         <label class="upload-input-label">
           <span>选择图片</span><input type="file" multiple @change="previewHandler" accept="image/*" class="upload-input">
         </label>
-        <ElButton size="mini" type="primary" @click="handleSubmit">提交</ElButton>
+        <ElButton size="mini" type="primary" @click="handleSubmit" icon="el-icon-upload">提交</ElButton>
     </div>
       <ul class="preview-image-container">
         <li v-for="image in previewImages" :key="image.id" class="preview-item">
@@ -32,49 +25,17 @@
         </li>
     </ul>
     </div>
-
-  </div>
 </template>
 
 <script>
-  import * as API from '@/network/api';
-  import { previewImage, showMessage } from '@/helper/uiHelper'
-
   export default {
+    name: 'PreviewImage',
+    props: [],
     data() {
-      return {
-        examples: [],
-        previewImages: []
-      }
-    },
-    mounted() {
-      // this.init()
+      return {}
     },
     computed: {},
     methods: {
-      init() {
-        const self = this;
-        this.$http.get(API.exampleAPI.findAll)
-          .then(res => {
-            const data = res.data;
-            if (data && data.success) {
-              this.examples = data.ret;
-            } else {
-              this.$message({
-                message: data.retDsc,
-                type: 'error',
-                duration: 1500,
-              });
-            }
-          })
-          .catch(e => {
-            console.log('查询example错误', e)
-          })
-      },
-      goToAdmin(row) {
-        this.$router.push(`/admin/${row.id}`)
-      },
-
       // 预览图片
       previewHandler(e) {
         const { files } = e.target;
@@ -149,42 +110,52 @@
         })
       },
 
-      async submitAll() {
+      async submitAll(file) {
         // 获取上传token
-        const res = await this.$http.get(API.exampleAPI.upload);
-        const uploadToken = res.data.ret.uploadToken;
-        // 参数
-        const Qiniu_UploadUrl = 'http://up-z1.qiniup.com';
-        const domain = 'http://design.oldzhou.cn';
+        const uploadToken = await this.getUploadToken();
+
+        const uploadImage = await this.uploadImage(file, uploadToken);
+
+        this.images.push(uploadImage)
+      },
+
+      // 获取上传token
+      async getUploadToken() {
+        let token = this.$cookie.get('uploadToken');
+        if (token) {
+          return token
+        }
+        const res = await this.$http.get(API.designAPI.upload);
+        token = res.data.ret.uploadToken;
+        const expireTime = new Date(Date.now() + 60 * 1000);
+        this.$cookie.set('uploadToken', token, {
+          expires: expireTime
+        });
+        return token
+      },
+
+      async uploadImage(file, uploadToken) {
         // 通过formData上传图片
         let formData = new FormData();
         formData.append('token', uploadToken);
-        formData.append('file', this.previewImages[0].file);
-
-        this.$http.post(Qiniu_UploadUrl, formData, {
+        formData.append('file', file);
+        formData.append('resource_key', this.exampleInfo.name + Date.now());
+        // 上传到七牛
+        const res = this.$http.post(CONF_QIU_NIU.UploadUrl, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           },
           withCredentials: false
-        }).then(res => {
-          const src = `${domain}/${res.key}`
         });
+        const src = `${domain}/${res.key}`
+
       }
     },
-
     components: {}
   }
 </script>
 
 <style scoped>
-  .table-container {
-    width: 50%;
-    margin: 0 auto;
-    padding-top: 20px;
-  }
-  .table {
-    text-align: center;
-  }
   .upload-wrap {
     width: 800px;
     margin: 10px auto;
@@ -247,6 +218,17 @@
     background-color: #409EFF;
     border-color: #409EFF;
     cursor: pointer;
+  }
+  .upload-input-label:hover {
+    background: #66b1ff;
+    border-color: #66b1ff;
+    color: #fff;
+  }
+  .upload-input-label:active {
+    outline: 0;
+    background: #3a8ee6;
+    border-color: #3a8ee6;
+    color: #fff;
   }
   .upload-input {
     width: 0;
