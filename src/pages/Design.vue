@@ -27,6 +27,7 @@
       }
     },
     mounted() {
+      console.log(this.$route.params.id)
       // this.init();
     },
     beforeRouteUpdate(to, from, next) {
@@ -35,8 +36,9 @@
     computed: {},
     methods: {
       init(id = this.$route.params.id) {
+
         const self = this;
-        this.$http.get(`${API.exampleAPI.find}/${id}/`)
+        this.$http.get(`${API.designAPI.find}/${id}/`)
           .then(res => {
             const data = res.data;
             if (data && data.success) {
@@ -59,7 +61,7 @@
           title: new Date().toLocaleDateString(),
           image: new Date().toLocaleTimeString()
         };
-        this.$http.post(API.exampleAPI.add, exampleInfo)
+        this.$http.post(API.designAPI.add, exampleInfo)
           .then(res => {
             const data = res.data;
             if (data && data.success) {

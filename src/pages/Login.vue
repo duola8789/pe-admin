@@ -73,6 +73,7 @@
               uiHelper.showMessage(data.retDsc, 'error');
             } else {
               sessionStorage.setItem('userToken', data.ret.token);
+              sessionStorage.setItem('nickname', data.ret.nickname);
               uiHelper.showMessage(data.retDsc, 'success', 1000, self.goInside);
             }
           })
@@ -81,7 +82,7 @@
           })
       },
       goInside() {
-        this.$router.push('/admin')
+        this.$router.push('/exampleAll')
       }
     },
     components: {}

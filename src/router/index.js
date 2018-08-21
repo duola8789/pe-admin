@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import JsonWebToken from 'jsonwebtoken';
-import Login from '@/components/Login'
-import Admin from '@/components/Admin'
-import AdminALL from '@/components/AdminALL'
+import Login from '@/pages/Login'
+import Design from '@/pages/Design'
+import DesignAll from '@/pages/DesignsAll'
 import config from '../../config/common';
 
 Vue.use(Router);
@@ -14,21 +14,19 @@ const router = new Router({
       path: '/',
       redirect: '/login',
       name: 'index',
-    },
-    {
+    }, {
       path: '/login',
       name: 'Login',
       component: Login
-    },
-    {
-      path: '/admin/:id',
-      name: 'admin',
-      component: Admin
-    },
-    {
-      path: '/admin',
-      name: 'adminAll',
-      component: AdminALL
+    }, {
+      path: '/design/:id?',
+      name: 'design',
+      component: Design,
+      exact: true
+    }, {
+      path: '/designAll',
+      name: 'designAll',
+      component: DesignAll
     }
   ]
 });
@@ -44,7 +42,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.path === '/login') { // 如果是跳转到登陆页的
     if (isTokenRight) { // 如果有token就转向admin页不返回登录页
-      next('/admin')
+      next('/designAll')
     } else { // 否则呆在登陆页
       next()
     }
