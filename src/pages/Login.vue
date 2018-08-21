@@ -39,6 +39,7 @@
 <script>
   import * as API from '@/network/api';
   import * as uiHelper from '@/helper/uiHelper';
+  import URL from '@/router/url'
 
   export default {
     data() {
@@ -82,7 +83,7 @@
           })
       },
       goInside() {
-        this.$router.push('/exampleAll')
+        this.$router.push(URL.designAll)
       }
     },
     components: {}

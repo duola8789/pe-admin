@@ -13,6 +13,8 @@
 
 <script>
   import { showMessage } from '@/helper/uiHelper'
+  import URL from '@/router/url'
+
   export default {
     name: 'Header',
     props: [],
@@ -29,7 +31,7 @@
       handleLogout() {
         window.sessionStorage.clear();
         showMessage('退出成功', 'success', 1000, () => {
-          this.$router.push('/login')
+          this.$router.push(URL.login)
         });
       }
     },

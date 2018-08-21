@@ -5,26 +5,27 @@ import Login from '@/pages/Login'
 import Design from '@/pages/Design'
 import DesignAll from '@/pages/DesignsAll'
 import config from '../../config/common';
+import URL from '@/router/url'
 
 Vue.use(Router);
 
 const router = new Router({
   routes: [
     {
-      path: '/',
-      redirect: '/login',
+      path: URL.root,
+      redirect: URL.login,
       name: 'index',
     }, {
-      path: '/login',
+      path: URL.login,
       name: 'Login',
       component: Login
     }, {
-      path: '/design/:id?',
+      path: `${URL.design}/:id?`,
       name: 'design',
       component: Design,
       exact: true
     }, {
-      path: '/designAll',
+      path: URL.designAll,
       name: 'designAll',
       component: DesignAll
     }
@@ -40,9 +41,9 @@ router.beforeEach((to, from, next) => {
     Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
   }
 
-  if (to.path === '/login') { // 如果是跳转到登陆页的
+  if (to.path === URL.login) { // 如果是跳转到登陆页的
     if (isTokenRight) { // 如果有token就转向admin页不返回登录页
-      next('/designAll')
+      next(URL.designAll)
     } else { // 否则呆在登陆页
       next()
     }
@@ -50,7 +51,7 @@ router.beforeEach((to, from, next) => {
     if (isTokenRight) { // 如果有token就正常转向
       next()
     } else {
-      next('/login') // 否则跳转回登录页
+      next(URL.login) // 否则跳转回登录页
     }
   }
 });
