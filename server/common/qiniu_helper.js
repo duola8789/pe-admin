@@ -9,6 +9,7 @@ const secretKey = qiniu_config.secretKey;
 const bucket = qiniu_config.bucket;
 let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 
+
 let options = {
   scope: bucket
 };

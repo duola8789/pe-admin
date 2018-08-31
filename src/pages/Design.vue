@@ -119,7 +119,7 @@
             </ElFormItem>
           </el-col>
         </ElRow>
-
+        <progress value="22" max="100"></progress>
       </ElForm>
     </div>
   </div>
@@ -155,6 +155,7 @@
           thumbnail: '',
           pic: ''
         },
+        progress: 0,
         imageFiles: [],
         maxLength: MAX_LENGTH,
         categories: CATEGORIES,
@@ -214,7 +215,7 @@
         const res = await forData(Request.design.certificate());
         token = res.uploadToken;
         // cookie有效期10分钟
-        const expireTime = new Date(Date.now() + 10 * 60 * 1000);
+        const expireTime = new Date(Date.now() + 60 * 1000);
         this.$cookie.set('uploadToken', token, {
           expires: expireTime
         });
@@ -230,8 +231,14 @@
           'resource_key': this.designInfo.title + Date.now()
         };
         // 上传到七牛
-        const res = await forData(Request.design.upload(data));
-        debugger
+        const config =  {
+          onUploadProgress: function (progressEvent) {
+            console.log(progressEvent)
+            // 对原生进度事件的处理
+            this.progress = (progressEvent.loaded / progressEvent.total * 100 | 0) + '%'
+          },
+        };
+        const res = await forData(Request.design.upload(data, config));
         return `${frontConf.qiuNiu.domain}/${res.key}`
       }
 
