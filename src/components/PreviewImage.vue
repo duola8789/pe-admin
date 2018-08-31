@@ -1,47 +1,74 @@
 <template>
   <div class="upload-wrap">
-      <div class="upload-button-wrap">
-        <label class="upload-input-label">
-          <span>选择图片</span><input type="file" multiple @change="previewHandler" accept="image/*" class="upload-input">
+    <div class="upload-button-wrap">
+      <label class="upload-input-label-all">
+        <i class="el-icon-edit image-choose-btn"></i><span>选择图片</span>
+        <input type="file" multiple @change="previewHandler" accept="image/*" class="upload-input">
+      </label>
+      <span class="input-tip">（详情图用于案例详情页，尺寸不小于1800*1200，比例保持一致）</span>
+      <!--<ElButton size="mini" type="primary" @click="handleSubmit" icon="el-icon-upload">提交</ElButton>-->
+    </div>
+    <ul class="preview-image-container">
+      <li v-for="image in previewImages" :key="image.id" class="preview-item">
+        <div class="preview-img-wrap">
+          <img :src="image.src" class="preview-img">
+           <label class="upload-input-label">
+             <i class="el-icon-edit image-replace-btn"></i>
+             <input type="file" @change="event => replaceImageHandler(event, image)" accept="image/*" class="upload-input">
+          </label>
+          <ElButton type="danger" icon="el-icon-delete" circle class="image-del-btn" size="mini"
+                    @click="deleteImageHandler(image)"></ElButton>
+        </div>
+      </li>
+      <li class="preview-item">
+        <label class="preview-icon"><i class="el-icon-plus image-edit-icon"></i><input type="file" @change="previewHandlerSingle" accept="image/*" class="upload-input">
         </label>
-        <ElButton size="mini" type="primary" @click="handleSubmit" icon="el-icon-upload">提交</ElButton>
-    </div>
-      <ul class="preview-image-container">
-        <li v-for="image in previewImages" :key="image.id" class="preview-item">
-          <div class="preview-img-wrap">
-            <img :src="image.src" class="preview-img">
-          </div>
-          <div class="preview-button-wrap">
-            <label class="upload-input-label">
-              <span>替换</span><input type="file" @change="event => replaceImageHandler(event, image)" accept="image/*"
-                                    class="upload-input">
-            </label>
-            <ElButton @click="deleteImageHandler(image)" size="mini" type="primary">删除</ElButton>
-          </div>
-        </li>
-         <li class="preview-item placement-wrap">
-          <label class="placement">
-            +<input type="file" @change="previewHandlerSingle" accept="image/*" class="upload-input"></label>
-        </li>
+      </li>
     </ul>
-    </div>
+  </div>
 </template>
-
 <script>
+  import { previewImage, showMessage } from '@/helper/uiHelper'
+  import * as Request from '@/network/request';
+  import { forData } from '@/helper/httpHelper'
+
+
   export default {
     name: 'PreviewImage',
-    props: [],
+    props: {
+      border: {
+        type: Boolean,
+        default: false
+      },
+      type: {
+        type: Boolean,
+      }
+    },
     data() {
-      return {}
+      return {
+        previewImages: []
+      }
+    },
+    watch: {
+      previewImages() {
+        this.$emit('previewPics', this.previewImages)
+      }
     },
     computed: {},
     methods: {
+      test() {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(222)
+          }, 5000)
+        })
+      },
       // 预览图片
       previewHandler(e) {
         const { files } = e.target;
         if (files && files.length > 0) {
           previewImage(e.target.files).then(v => {
-            this.previewImages = v
+            this.previewImages = v;
           }).catch(error => {
             e.target.value = '';
           })
@@ -58,7 +85,7 @@
         }
         previewImage(files).then(v => {
           let index = this.previewImages.findIndex(v => v.id === id);
-          this.previewImages.splice(index, 1, v[0])
+          this.previewImages.splice(index, 1, v[0]);
         }).catch(error => {
           e.target.value = src;
         });
@@ -75,7 +102,8 @@
           this.previewImages = [
             ...this.previewImages,
             v[0]
-          ]
+          ];
+          e.target.value = ''
         }).catch(error => {
           e.target.value = src;
         });
@@ -114,7 +142,7 @@
         // 获取上传token
         const uploadToken = await this.getUploadToken();
 
-        const uploadImage = await this.uploadImage(file, uploadToken);
+        const uploadImage = await this.uploadImage(file[0], uploadToken);
 
         this.images.push(uploadImage)
       },
@@ -125,7 +153,7 @@
         if (token) {
           return token
         }
-        const res = await this.$http.get(API.designAPI.upload);
+        const res = await forData(Request.design.certificate());
         token = res.data.ret.uploadToken;
         const expireTime = new Date(Date.now() + 60 * 1000);
         this.$cookie.set('uploadToken', token, {
@@ -139,15 +167,16 @@
         let formData = new FormData();
         formData.append('token', uploadToken);
         formData.append('file', file);
+        console.log(file)
         formData.append('resource_key', this.exampleInfo.name + Date.now());
         // 上传到七牛
-        const res = this.$http.post(CONF_QIU_NIU.UploadUrl, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          withCredentials: false
-        });
-        const src = `${domain}/${res.key}`
+        // const res = this.$http.post(CONF_QIU_NIU.UploadUrl, formData, {
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data'
+        //   },
+        //   withCredentials: false
+        // });
+        // const src = `${domain}/${res.key}`
 
       }
     },
@@ -156,68 +185,90 @@
 </script>
 
 <style scoped>
-  .upload-wrap {
-    width: 800px;
-    margin: 10px auto;
-  }
   .preview-image-container {
     margin: 0;
-    padding: 2px 5px;
-    border: 1px solid #333;
-    overflow: hidden;
+    padding: 0 ;
+    font-size: 0;
   }
   .preview-item {
-    float: left;
-    width: 25%;
-    height: 300px;
-    margin: 10px 0;
-    padding: 0 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    display: inline-block;
+    width: 290px;
+    height: 200px;
+    margin: 0 8px 8px 0;
     list-style: none;
+    vertical-align: top;
   }
-  .placement-wrap {
-    padding-bottom: 5px;
-  }
-  .placement {
-    height: 90%;
-    line-height: 270px;
+  .preview-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
     font-size: 80px;
     border-radius: 6px;
     color: #909399;
     border: 1px solid antiquewhite;
     cursor: pointer;
+    text-align: center;
     transition: all 0.2s ease;
     user-select: none;
   }
-  .placement:active {
+  .preview-icon:active,
+  .preview-icon:hover {
     text-shadow: 0 1px 1px hsla(0, 0%, 100%, .3);
     box-shadow: 0 0 0 1px hsla(0, 0%, 100%, .3) inset, 0 .3em 1em rgba(0, 0, 0, 0.12);
   }
+  .image-edit-icon {
+    margin-top: 55px;
+  }
   .preview-img-wrap {
-    height: 90%;
+    width: 100%;
+    height: 100%;
     margin-bottom: 5px;
     border-radius: 6px;
-    overflow: hidden;
+    /*overflow: hidden;*/
   }
   .preview-img {
     width: 100%;
+    height: 100%;
     border-radius: 6px;
   }
   .upload-button-wrap {
-    margin: 10px 0;
+    margin: 0 0 10px 0;
   }
-  .upload-input-label {
+  .preview-img-wrap {
+    position: relative;
+  }
+  .upload-input-label-all {
     display: inline-block;
-    margin: 0 5px;
-    padding: 6px 8px;
+    margin: 0;
+    padding: 8px 12px;
     font-size: 12px;
+    line-height: 14px;
     border-radius: 3px;
     color: #fff;
     background-color: #409EFF;
     border-color: #409EFF;
     cursor: pointer;
+  }
+  .upload-input-label-all:hover {
+    background: #66b1ff;
+    border-color: #66b1ff;
+    color: #fff;
+  }
+  .upload-input-label-all:active {
+    outline: 0;
+    background: #3a8ee6;
+    border-color: #3a8ee6;
+    color: #fff;
+  }
+  .image-choose-btn {
+    margin-right: 5px
+  }
+  .upload-input-label {
+    position: absolute;
+    right: 42px;
+    top: 5px;
+    line-height: 0;
+    border-radius: 50%;
   }
   .upload-input-label:hover {
     background: #66b1ff;
@@ -230,9 +281,31 @@
     border-color: #3a8ee6;
     color: #fff;
   }
+  .image-del-btn {
+    position: absolute;
+    right: 4px;
+    top: 5px;
+    padding: 10px;
+    border: none;
+    opacity: 0.7;
+    font-size: 14px;
+  }
   .upload-input {
     width: 0;
     font-size: 0;
     visibility: hidden;
+  }
+  .image-replace-btn {
+    border-radius: 50%;
+    padding: 10px;
+    color: #fff;
+    background-color: #409EFF;
+    border-color: #409EFF;
+    cursor: pointer;
+    font-size: 14px;
+    opacity: 0.7;
+  }
+  .input-tip {
+    margin-left: 30px;
   }
 </style>

@@ -54,9 +54,9 @@ const extract = async promise => {
     if (config.method === 'post') {
       let { data } = RESULT;
       if (data) {
-        ret = data.ret;
-        retCode = data.retCode;
-        retDesc = data.retDesc;
+        ret = data.ret || data;
+        retCode = data.retCode || 200;
+        retDesc = data.retDesc || '上传七牛';
       }
       let PARAMS = {};
       if (config.data) {
@@ -141,7 +141,7 @@ export const put = (url, data, config) => extract(
   })
 );
 
-export const postFile = (url, data) => {
+export const postFile = (url, data, config) => {
   const formData = new FormData();
   for (const prop in data) {
     if (data.hasOwnProperty(prop)) {
@@ -149,7 +149,13 @@ export const postFile = (url, data) => {
     }
   }
   return extract(
-    axios.post(url, formData)
+    axios.post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      withCredentials: false,
+      ...config
+    })
   )
 };
 

@@ -40,6 +40,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(128),
       allowNull: false
     },
+    services: {
+      type: DataTypes.STRING(128),
+      allowNull: false
+    },
     designer: {
       type: DataTypes.STRING(128),
       allowNull: false

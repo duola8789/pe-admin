@@ -2,11 +2,11 @@
   <div class="container">
     <Header></Header>
     <div class="table-container">
-      <h1>管理系统</h1>
+      <h1>后台管理系统</h1>
       <div class="query-container">
         <ElCard shadow="never" :body-style="{padding: '10px 20px', textAlign: 'left'}">
           <ElButton type="primary" icon="el-icon-search">查询</ElButton>
-          <ElButton type="primary" icon="el-icon-plus">新建</ElButton>
+          <ElButton type="primary" icon="el-icon-plus" @click="handleCreate">新建</ElButton>
         </ElCard>
       </div>
     <ElTable :data="examples" border>
@@ -42,15 +42,9 @@
 <script>
   import Header from '@/components/Header'
   import * as Request from '@/network/request';
-  import { previewImage, showMessage } from '@/helper/uiHelper'
   import { forData } from '@/helper/httpHelper'
   import { formatters } from '@/helper/formatter'
-
-  const CONF_QIU_NIU = {
-    UploadUrl: 'http://up-z1.qiniup.com',
-    domain: 'http://design.oldzhou.cn'
-  };
-
+  import URL from '@/router/url'
 
   export default {
     data() {
@@ -60,7 +54,12 @@
           title: '标题',
         }, {
           prop: 'category',
+          title: '类别',
+          width: 100
+        }, {
+          prop: 'services',
           title: '服务内容',
+          formatter: 'makeText'
         }, {
           prop: 'designer',
           title: '设计机构',
@@ -129,6 +128,11 @@
       async refresh() {
         this.examples = await forData(Request.design.findAll(this.queryMerge));
       },
+
+      handleCreate() {
+        this.$router.push(URL.design)
+      },
+
       goToAdmin(row) {
         this.$router.push(`/admin/${row.id}`)
       },

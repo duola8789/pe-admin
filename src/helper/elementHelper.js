@@ -7,7 +7,16 @@ import 'element-ui/lib/theme-chalk/index.css';
 import {
   Table, TableColumn, Row, Col,
   Input,
+  DatePicker,
+  RadioButton,
+  RadioGroup,
+  CheckboxGroup,
+  CheckboxButton,
+  Select,
+  Option,
   Button,
+  Form,
+  FormItem,
   Card,
   Tooltip,
   MessageBox,
@@ -16,7 +25,16 @@ import {
 [
   Table, TableColumn, Row, Col,
   Input,
+  DatePicker,
+  RadioButton,
+  RadioGroup,
+  CheckboxGroup,
+  CheckboxButton,
+  Select,
+  Option,
   Button,
+  Form,
+  FormItem,
   Card,
   Tooltip
 ].forEach(Compo => Vue.use(Compo));

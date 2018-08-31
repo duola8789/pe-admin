@@ -1,6 +1,8 @@
 /**
  * Created by zh on 2018/6/5.
  */
+import { frontConf } from '@/config/common'
+
 export const userAPI = {
   login:        '/auth/login', // 登陆 -- POST,
   create:       '/auth/user', // 注册 -- POST,
@@ -14,5 +16,6 @@ export const designAPI = {
   update:       '/api/design',
   remove:       '/api/design',
   certificate:  '/api/upload/certificate', // 上传文件凭证 -- GET,
+  upload:       frontConf.qiuNiu.uploadUrl, // 上传文件凭证 -- GET,
 };
 

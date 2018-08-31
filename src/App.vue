@@ -22,11 +22,11 @@
     box-sizing: inherit;
   }
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'PingFangSC-Regular', '微软雅黑', 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: #444;
   }
   .thumbnail {
     width: 100px;
@@ -45,5 +45,14 @@
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+  }
+  .upload-input {
+    display: none;
+  }
+  .input-tip {
+    font-size: 14px;
+    font-weight: bold;
+    color: #E6A23C;
+    margin: 0
   }
 </style>

@@ -32,6 +32,7 @@ export async function getDesigns(ctx) {
     thumbnail: v.thumbnail,
     releaseTime: v.releaseTime + '年',
     category: v.category,
+    services: v.services,
     comment: v.comment,
     designer: v.designer,
     description: v.description,

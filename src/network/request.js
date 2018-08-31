@@ -2,7 +2,7 @@
  * Created by zh on 2018/8/20.
  */
 import * as API from '@/network/api'
-import { get, post, del, put } from '@/helper/httpHelper'
+import { get, post, del, put, postFile } from '@/helper/httpHelper'
 
 // 查询
 const find = async (params) =>
@@ -28,11 +28,16 @@ const remove = async (params) =>
 const certificate = async (params) =>
   await get(API.designAPI.certificate, params);
 
+// 上传图片
+const upload = async (params, config) =>
+  await postFile(API.designAPI.upload, params, config);
+
 export const design = {
   find,
   findAll,
   add,
   update,
   remove,
-  certificate
+  certificate,
+  upload
 };

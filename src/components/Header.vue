@@ -4,9 +4,8 @@
       <img class='logo' src="@/assets/PE-logo-all.jpg">
       <div>
         <span class="nickname">{{nickname}}，你好！</span>
-        <ElButton size="mini" type="primary" @click="handleLogout">退出</ElButton>
+        <ElButton size="mini" type="primary" @click="handleLogout">退出系统</ElButton>
       </div>
-
     </div>
   </header>
 </template>
